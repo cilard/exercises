@@ -1,6 +1,7 @@
-# exercises
+# Exercises
 Various code created while learning things
 
-Hello there!
-
-Code uploaded here has been created while learning Python 3, Ansible, Docker.
+## Contents
+- [Exercise 1](exercise1/README.md)
+- Exercise 2
+- Exercise 3
