@@ -1,0 +1,33 @@
+---
+# tasks file for rsyslog
+
+  - name: Install rsyslog
+    become: true
+    apt: name=rsyslog state=latest update_cache=yes
+
+  - name: Purge log files from /etc/rsyslog.d/
+    become: true
+    command: rm -f /etc/rsyslog.d/*
+
+  - name: Push rsyslog.conf
+    become: true
+    copy: src=rsyslog-conf dest=/etc/rsyslog.conf
+
+  - name: Configure rsyslog to log only default files
+    become: true
+    copy: src=rsyslog-default.conf dest=/etc/rsyslog.d/50-default.conf
+    notify: Restart rsyslog
+
+  - name: Configure rsyslog to log custom files
+    become: true
+    copy: src=rsyslog-custom.conf dest=/etc/rsyslog.d/21-cloudinit.conf
+    when: custom_log == "true"
+    notify: Restart rsyslog
+
+  - name: Configure syslog receiver
+    become: true
+    lineinfile: path=/etc/rsyslog.conf insertafter=EOF line= "{{ receiver }}"
+    when: custom_receiver == "{{ receiver }}"
+
+  - name: Start rsyslog
+    service: name=rsyslog state=started

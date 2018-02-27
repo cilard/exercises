@@ -1,0 +1,6 @@
+---
+- hosts: all
+  roles:
+    - rsyslog
+    - { role: rsyslog, custom_log: "true" }
+    - { role: rsyslog, custom_receiver: "{{ receiver }}" }
